@@ -1,0 +1,50 @@
+// int smallestSuperSequence(string str1, string str2)
+// {
+// 	//Write your code here
+// }
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int smallestSuperSequenceHelper(string s1, string s2, int m, int n, int **dp)
+{
+
+    for (int i = m; i >= 0; i--)
+    {
+        for (int j = n; j >= 0; j--)
+        {
+            if (s1[i] == s2[j])
+            {
+                dp[i][j] = dp[i + 1][j + 1] + 1;
+            }
+            else
+            {
+                dp[i][j] = min(dp[i + 1][j], dp[i][j + 1]) + 1;
+            }
+        }
+    }
+
+    return dp[0][0];
+}
+
+int smallestSuperSequence(string s1, string s2)
+{
+    int m = s1.length(), n = s2.length();
+    int **dp = new int *[m + 1];
+    for (int i = 0; i <= m; i++)
+    {
+        dp[i] = new int[n + 1];
+    }
+    int count = 0;
+    for (int i = n; i >= 0; i--)
+    {
+        dp[m][i] = count++;
+    }
+    count = 0;
+    for (int i = m; i >= 0; i--)
+    {
+        dp[i][n] = count++;
+    }
+
+    int ans = smallestSuperSequenceHelper(s1, s2, m - 1, n - 1, dp);
+    return ans;
+}
